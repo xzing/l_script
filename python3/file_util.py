@@ -46,4 +46,8 @@ def overwrite_json(s_file_path, s_content):
     with codecs.open(s_file_path, 'w', encoding='utf-8') as f:
         json.dump(s_content, f, ensure_ascii=False)
 
-
+def read_file(s_file_path):
+    if os.path.exists(s_file_path):
+        open(s_file_path, "r")
+    else:
+        raise IOError(f"{s_file_path} file not exist")
