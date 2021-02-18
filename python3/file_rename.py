@@ -4,7 +4,7 @@
 import os
 import re
 
-path = r"G:/test"
+path = r"C:\Users\Zing\Downloads\GoInit"
 
 
 def func(path):
@@ -90,4 +90,5 @@ def bulk_add_suffix(file_path, suffix):
 
 
 if __name__ == '__main__':
-    bulk_add_prefix(path, '0')
+    # print(read_under_files(path))
+    bulk_replace_name(path, 'P','')
