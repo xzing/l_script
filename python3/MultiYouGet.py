@@ -32,7 +32,7 @@ def multi_download(start, end):
     pool.map(multi_process, process_url)
     pool.close()
     pool.join()
-    print("wailting ..." )
+    print("waiting ..." )
 
 
 exitFlag = 0
