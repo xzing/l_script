@@ -8,9 +8,9 @@ from you_get import common as you_get
 
 # https://www.bilibili.com/video/BV1S7411m7vM?p=2
 def download():
-    #  串行
-    for i in range(40,60):
-        urlStr = "https://www.bilibili.com/video/BV1c4411J7Ty?p=%d" % i
+    #  串行 174
+    for i in range(1,24):
+        urlStr = "https://www.bilibili.com/video/BV1av411B7qT?p=%d" % i
         print(urlStr)
         myThread(i, "Thread-%d" % i, urlStr).start()
     pass
@@ -22,7 +22,7 @@ def multi_process(urls):
 
 
 def multi_download(start, end):
-    urlStr = 'https://www.bilibili.com/video/BV1c4411J7Ty?p='
+    urlStr = 'https://www.bilibili.com/video/BV1hJ411D7k2?p='
     process_url=[]
     for i in range(start, end):
         process_url.append(urlStr + str(i))
@@ -36,7 +36,7 @@ def multi_download(start, end):
 
 
 exitFlag = 0
-save_to = "G:\\Netty"
+save_to = "F:\\FuckThunder\\redis"
 
 
 class myThread(threading.Thread):  # 继承父类threading.Thread
@@ -48,10 +48,32 @@ class myThread(threading.Thread):  # 继承父类threading.Thread
 
     def run(self):  # 把要执行的代码写到run函数里面 线程在创建后会直接运行run函数
         print("Starting " + self.name)
-        print(os.system(r"you-get -o %s %s" % (save_to, self.urlStr)))
+        print(os.system(r"you-get -o %s --no-caption %s" % (save_to, self.urlStr)))
         print("Exiting " + self.name)
 
+def mkdir(path):
+    # 去除首位空格
+    path=path.strip()
+    # 去除尾部 \ 符号
+    path=path.rstrip("\\")
+    # 判断路径是否存在
+    isExists=os.path.exists(path)
+    # 判断结果
+    if not isExists:
+        # 如果不存在则创建目录,创建目录操作函数
+        '''
+        os.mkdir(path)与os.makedirs(path)的区别是,当父目录不存在的时候os.mkdir(path)不会创建，os.makedirs(path)则会创建父目录
+        '''
+        #此处路径最好使用utf-8解码，否则在磁盘中可能会出现乱码的情况
+        os.makedirs(path.decode('utf-8'))
+        print(path+' 创建成功')
+        return True
+    else:
+        # 如果目录存在则不创建，并提示目录已存在
+        print(path+' 目录已存在')
+        return False
 
 if __name__ == '__main__':
-    # download()
-    multi_download(60, 90)
+    mkdir(save_to)
+    download()
+    # multi_download(90, 97)
