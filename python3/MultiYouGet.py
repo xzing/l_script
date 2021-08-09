@@ -9,8 +9,10 @@ from you_get import common as you_get
 # https://www.bilibili.com/video/BV1S7411m7vM?p=2
 def download():
     #  串行 174
-    for i in range(1,24):
-        urlStr = "https://www.bilibili.com/video/BV1av411B7qT?p=%d" % i
+    for i in range(1,1):
+    # for i in [17]:
+        urlStr = "https://www.bilibili.com/video/BV1zJ411w7SV?p=%d" % i
+        # urlStr = "https://www.bilibili.com/video/BV1RT4y137an"
         print(urlStr)
         myThread(i, "Thread-%d" % i, urlStr).start()
     pass
@@ -36,7 +38,7 @@ def multi_download(start, end):
 
 
 exitFlag = 0
-save_to = "F:\\FuckThunder\\redis"
+save_to = "F:\\FuckThunder\\OKR"
 
 
 class myThread(threading.Thread):  # 继承父类threading.Thread
@@ -65,7 +67,7 @@ def mkdir(path):
         os.mkdir(path)与os.makedirs(path)的区别是,当父目录不存在的时候os.mkdir(path)不会创建，os.makedirs(path)则会创建父目录
         '''
         #此处路径最好使用utf-8解码，否则在磁盘中可能会出现乱码的情况
-        os.makedirs(path.decode('utf-8'))
+        os.makedirs(path)
         print(path+' 创建成功')
         return True
     else:
@@ -74,6 +76,8 @@ def mkdir(path):
         return False
 
 if __name__ == '__main__':
-    mkdir(save_to)
+    # mkdir(save_to)
     download()
     # multi_download(90, 97)
+    os.startfile(save_to)
+
