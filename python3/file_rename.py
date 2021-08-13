@@ -89,6 +89,32 @@ def bulk_add_suffix(file_path, suffix):
         print(f_name, " to ", add_suffix(f_name, suffix))
 
 
+names = ""
+
+
+def bulk_test():
+    path = "F:\FuckThunder\ASC"
+    under_file = read_under_files(path)
+    real_file_name = names.split(",")
+    name_dict = {}
+    for m in real_file_name:
+        k_v = m.split("、")
+        key_id = k_v[0]
+        name_dict[key_id] = k_v[1]
+    for f_name in under_file:
+        data_name = f_name.split("、")
+        index = data_name[0]
+        real_name = data_name[1]
+        f_id = int(index, base=10)
+        if f_id > 20:
+            rename = name_dict[index]
+            new_name = index + "、" + rename + ".mp4"
+            print(index, real_name, new_name)
+            # print(f_id, real_name, real_file_name[tmp_id])
+            # print(real_name, new_name)
+            os.rename(path + r"/" + f_name, path + r"/0" + new_name)
+
+
 if __name__ == '__main__':
     # print(read_under_files(path))
-    bulk_replace_name(path, 'P','')
+    bulk_test()
