@@ -6,19 +6,29 @@ import threading
 from multiprocessing import Pool
 
 import requests
+
 from you_get import common as you_get
 
 
 # https://www.bilibili.com/video/BV1S7411m7vM?p=2
 def download():
     #  串行 174
-    for i in range(40, 70):
+    for i in range(1, 28):
         # for i in [17]:
-        url_str = "https://www.bilibili.com/video/BV1qv411K7eE?p=%d" % i
+        url_str = "https://www.bilibili.com/video/BV19y4y1b7Uo?p=%d" % i
         # urlStr = "https://www.bilibili.com/video/BV1RT4y137an"
         print(url_str)
         DownloadThread(i, "Thread-%d" % i, url_str).start()
     pass
+
+
+def download(list):
+    url_str = "https://www.bilibili.com/video/%s?p=%d"
+    for m in list:
+        index = m['page']
+        part_url = url_str % (bv_name, index)
+        print(part_url)
+        DownloadThread(index, "Thread-%d" % index, part_url, m['name']).start()
 
 
 def get_bv_playlist(bv):
@@ -29,22 +39,24 @@ def get_bv_playlist(bv):
     return jo['data']
 
 
-def download(bv):
+def download_and_save_name(bv):
     playlist = get_bv_playlist(bv)
 
 
-
-def multi_process(urls):
-    sys.argv = ['you-get', '-o', save_to, '--no-caption', urls]
+def multi_process(k_and_v):
+    url = k_and_v['url']
+    file_name = k_and_v['file_name']
+    print('url', url, 'file_name', file_name)
+    sys.argv = ['you-get', '-o', save_to, '--no-caption', url, '-O', file_name]
     you_get.main()
 
 
-def multi_download(start, end):
-    url_str = 'https://www.bilibili.com/video/BV1qv411K7eE?p='
+def multi_download(data_list):
+    url_str = 'https://www.bilibili.com/video/%s?p=%d'
     process_url = []
-    for i in range(start, end):
-        process_url.append(url_str + str(i))
-    print(url_str)
+    for i in data_list:
+        k_and_v = {'url': url_str % (bv_name, i['page']), 'file_name': i['name']}
+        process_url.append(k_and_v)
     print("Starting ...")
     pool = Pool(8)
     pool.map(multi_process, process_url)
@@ -54,7 +66,11 @@ def multi_download(start, end):
 
 
 exitFlag = 0
-save_to = "F:\\FuckThunder\\ASC"
+save_to = "~/Downloads/a_kafka"
+bv_name = 'BV11q4y1D7go'
+
+
+# save_to = "F:\\FuckThunder\\ASC"
 
 
 class DownloadThread(threading.Thread):  # 继承父类threading.Thread
@@ -98,7 +114,14 @@ def mkdir(path):
 
 
 if __name__ == '__main__':
-    # mkdir(save_to)
-    # download()
-    # multi_download(90, 97)
+    str_name = get_bv_playlist(bv_name)
+    print(str_name)
+    list = []
+    for obj in str_name:
+        file_name = 'p-{:<4d}'.format(obj['page'])+'-'+obj['part']
+        list.append({'page': obj['page'], 'name': obj['part']})
+    print(list)
+    mkdir(save_to)
+    # download(list)
+    multi_download(list)
     os.startfile(save_to)
